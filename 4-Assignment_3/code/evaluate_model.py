@@ -40,7 +40,8 @@ def predict(model, corpus, n_words, device, temp=1.0, initial_phrase = None):
             #print(output.shape)
             word_weights = output.squeeze().div(temp).exp().cpu()
             #word_idx = torch.argmax(word_weights, dim=1)[3]
-            word_idx = torch.multinomial(word_weights, num_samples=1)[0]
+            print(word_weights.shape)
+            word_idx = torch.multinomial(word_weights, num_samples=1)[-1]
             #probs = torch.softmax(output[:, -1] / temp, dim=-1)  
             #word_idx = torch.multinomial(probs, num_samples=1).item()
             indxes.append(word_idx)
@@ -102,7 +103,7 @@ def evaluate_model(model_path, model_type, user_options, gen_text = False):
 
     # test prediction function
     if gen_text:
-        predict(model, corpus=corpus, n_words=200, device=device, initial_phrase = "once again the specialists")
+        predict(model, corpus=corpus, n_words=200, device=device, initial_phrase = "the specialists")
 
 
 if __name__ == "__main__":
@@ -112,9 +113,9 @@ if __name__ == "__main__":
         for file in files:
             model_index = int(file[3:5])
             gen_text = (model_index == 23 or model_index == 33)
-            if not gen_text:
-                continue 
             model_type = "RNN" if model_index < 20 else "LSTM"
+            if not gen_text:
+                continue
             evaluate_model(model_path=os.path.join(subdir, file), model_type=model_type, user_options=eval_configs, gen_text=gen_text)
             indx += 1
     print('=' * 125)

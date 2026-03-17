@@ -161,7 +161,7 @@ def train_model(common_options, user_options):
 if __name__ == "__main__":
     all_experiments = parse_configs("./configs/train_configs.yml")
     for exp_name, exp_hyp in all_experiments["EXPERIMENTS"].items():
-        if exp_name not in ["EXP_02", "EXP_06","EXP_22", "EXP_26"]:
+        if exp_name not in ["EXP_22", "EXP_26"]:
             print(f"Skipping experiment {exp_name}...")
             continue
         
